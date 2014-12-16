@@ -20,28 +20,29 @@ class Engine
 
 	//project variables
 	DoublePendulum *doublePendulum;
+	int prev_z; //for mouse wheel input
 
 	//allegro variables
 	ALLEGRO_DISPLAY *display;
 	ALLEGRO_EVENT_QUEUE *eventQueue;
-	ALLEGRO_EVENT_QUEUE *redrawQueue;
 	ALLEGRO_EVENT event;
 	ALLEGRO_TIMER *timer;
-	ALLEGRO_FONT *font18;
+	//ALLEGRO_FONT *font18;
 
 public:
-	Engine(void);
-	~Engine(void);
+	Engine(int w, int h, int fps);
+	//~Engine(void);
 
 	void Init();
+	void InputHandler();
 	void Update();
 	void Render();
 	void Destroy();
 
 	bool Done() const;
 
-	ALLEGRO_EVENT_QUEUE * GetRedrawQueue() const { return redrawQueue; }
-	ALLEGRO_EVENT GetEvent() const { return event; }
+	ALLEGRO_EVENT_QUEUE * GetEventQueue() const { return eventQueue; }
+	ALLEGRO_EVENT * GetEvent() { return &event; }
 
 
 };
