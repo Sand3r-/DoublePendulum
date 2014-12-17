@@ -1,6 +1,7 @@
 #include <allegro5/allegro_primitives.h>
 #include "DoublePendulum.h"
 #include <math.h>
+#include <cmath>
 
 using namespace std;
 
@@ -58,13 +59,17 @@ void DoublePendulum::IncreaseRodLength(int id, float amount)
 
 void DoublePendulum::IncreaseParticleMass(int id, float amount)
 {
-	if(-amount >= m1 || -amount >= m2) return;
-
 	id--;
 	if(id)
+	{
+		if(-amount >= m2) return;
 		m2 += amount;
+	}
 	else
+	{
+		if(-amount >= m1) return;
 		m1 += amount;
+	}
 
 	Init(length1, length2, m1, m2, presets[0], presets[1], jointX, jointY);
 }
@@ -150,12 +155,50 @@ void DoublePendulum::RungeKuttaMethod()
 	theta2 = aux_theta2[0] + (dt/6.0) * (aux_omega2[0] + 2 * aux_omega2[1] + 2 * aux_omega2[2] + aux_omega2[3]);
 	omega2 = aux_omega2[0] + (dt/6.0) * (aux_epsilon2[0] +  2 * aux_epsilon2[1] + 2 * aux_epsilon2[2] + aux_epsilon2[3]);
 }
+/*
+float DoublePendulum::FastSin(float val) 
+{
+	if(val < 0)
+		return -FastSin(-val);
+
+	if(val > 2 * ALLEGRO_PI)
+		val = fmod(val, (float)(2.0f*ALLEGRO_PI));
+
+	if(val > ALLEGRO_PI / 2 && val <= ALLEGRO_PI)
+		return cos(ALLEGRO_PI / 2 - val);
+	else if(val > ALLEGRO_PI && val <= 1.5 * ALLEGRO_PI)
+		return -cos(1.5 * ALLEGRO_PI - val);
+	else if(val > 1.5 * ALLEGRO_PI && val <= 2 * ALLEGRO_PI)
+		return -sin(2 * ALLEGRO_PI - val);
+
+	float angleSqr = val*val;
+	float result = 7.61e-03f;
+	result *= angleSqr;
+	result -= 1.6605e-01f;
+	result *= angleSqr;
+	result += 1.0f;
+	result *= val;
+	return result;
+}
+
+float FastCos(float val) 
+{
+	float angleSqr = val*val;
+	float result = 3.705e-02f;
+	result *= angleSqr;
+	result -= 4.967e-01f;
+	result *= angleSqr;
+	result += 1.0f;
+
+	return result;
+}*/
+
 
 void DoublePendulum::Render()
 {
 	//rods
-	al_draw_line(jointX, jointY, x1, y1, al_map_rgb(150, 150, 150), 10);
-	al_draw_line(x1, y1, x2, y2, al_map_rgb(150, 150, 150), 10);
+	al_draw_line(jointX, jointY, x1, y1, al_map_rgb(80, 80, 80), 10);
+	al_draw_line(x1, y1, x2, y2, al_map_rgb(80, 80, 80), 10);
 
 	//masses
 	al_draw_filled_circle(x1, y1, 5*m1, al_map_rgb(40, 163, 204));

@@ -59,6 +59,9 @@ public:
 	
 	void RungeKuttaMethod();
 
+	//float FastSin(float val);
+	//float FastCos(float val);
+
 	void Update();
 	void Render();
 };
